@@ -9,7 +9,7 @@
 //
 // ----------------------------------------------------------------------------
 
-package set
+package stringset
 
 // ----------------------------------------------------------------------------
 // Imports
@@ -37,7 +37,7 @@ func TestMain(m *testing.M) {
 // Test_NewStringSet checks the operation of creating a new set, IsEmpty, and
 // Size.
 func Test_NewStringSet(t *testing.T) {
-	var set = NewStringSet()
+	var set = New()
 	var testFunction = func(t *testing.T) {
 		if !set.IsEmpty() {
 			t.Error("An empty set was not created")
@@ -47,12 +47,12 @@ func Test_NewStringSet(t *testing.T) {
 		}
 	}
 
-	t.Run("Test_Total", testFunction)
+	t.Run("Test_NewStringSet", testFunction)
 }
 
 // Test_Add checks the operation of adding an item to the set.
 func Test_Add(t *testing.T) {
-	var set = NewStringSet()
+	var set = New()
 	set.Add("Hello")
 	var testFunction = func(t *testing.T) {
 		if set.IsEmpty() {
@@ -70,12 +70,12 @@ func Test_Add(t *testing.T) {
 		}
 	}
 
-	t.Run("Test_Total", testFunction)
+	t.Run("Test_Add", testFunction)
 }
 
 // Test_Delete checks the operaton of deleting a string from the set.
 func Test_Delete(t *testing.T) {
-	var set = NewStringSet()
+	var set = New()
 	set.Add("Hello")
 	set.Delete("Hello")
 	var testFunction = func(t *testing.T) {
@@ -91,13 +91,13 @@ func Test_Delete(t *testing.T) {
 		}
 	}
 
-	t.Run("Test_Total", testFunction)
+	t.Run("Test_Delete", testFunction)
 }
 
 // Test_ToSlice checks the operation of converting a set into a slice of
 // strings.
-func Test_To_Slice(t *testing.T) {
-	var set = NewStringSet()
+func Test_ToSlice(t *testing.T) {
+	var set = New()
 	set.Add("Hello")
 	set.Add("World")
 	var values = set.ToSlice()
@@ -107,13 +107,13 @@ func Test_To_Slice(t *testing.T) {
 			t.Error("slice is not the correct length")
 		}
 	}
-	t.Run("Test_Total", testFunction)
+	t.Run("Test_ToSlice", testFunction)
 }
 
 // Test_AddAll checks the operation of adding a slice of strings to
 // the set.
 func Test_AddAll(t *testing.T) {
-	var set = NewStringSet()
+	var set = New()
 	var values = []string{
 		"One",
 		"Two",
@@ -125,6 +125,40 @@ func Test_AddAll(t *testing.T) {
 	var testFunction = func(t *testing.T) {
 		if set.Size() != 4 {
 			t.Error("invalid size of set: " + strconv.Itoa(set.Size()))
+		}
+		if !set.Contains("Four") {
+			t.Error("could not find Four in set")
+		}
+	}
+
+	t.Run("Test_AddAll", testFunction)
+}
+
+// Test_Equal checks the operation of the Equals method.
+func Test_Equal(t *testing.T) {
+	var set1 = New()
+	var set2 = New()
+	var set3 = New()
+	var set4 = New()
+	var values = []string{
+		"One",
+		"Two",
+		"Three",
+		"Three",
+		"Four",
+	}
+	set1.AddAll(values)
+	set2.AddAll(values)
+
+	var testFunction = func(t *testing.T) {
+		if !set1.Equal(&set2) {
+			t.Error("sets were not found to be equal")
+		}
+		if !set3.Equal(&set4) {
+			t.Error("two empty set were not found to be equal")
+		}
+		if set1.Equal(&set3) {
+			t.Error("an empty set was found to be equal to a populated set")
 		}
 	}
 

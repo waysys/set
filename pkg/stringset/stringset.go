@@ -9,12 +9,16 @@
 //
 // ----------------------------------------------------------------------------
 //
-// The set package contains implementations of sets for different base types.
-package set
+// The stringset package contains implementations of sets for the string base type.
+package stringset
 
 // ----------------------------------------------------------------------------
 // Imports
 // ----------------------------------------------------------------------------
+
+import (
+	"maps"
+)
 
 // ----------------------------------------------------------------------------
 // Types
@@ -26,7 +30,7 @@ type StringSet map[string]bool
 // Factory Functions
 // ----------------------------------------------------------------------------
 
-func NewStringSet() StringSet {
+func New() StringSet {
 	var set = make(StringSet)
 	return set
 }
@@ -78,4 +82,10 @@ func (set *StringSet) ToSlice() []string {
 		values = append(values, value)
 	}
 	return values
+}
+
+// Equal returns true if a set is equal to another set.
+func (set *StringSet) Equal(another *StringSet) bool {
+	var result = maps.Equal(*set, *another)
+	return result
 }
